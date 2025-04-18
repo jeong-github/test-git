@@ -31,7 +31,7 @@ pipeline {
         stage('Commit and Push') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'jeong', variable: 'GIT_CREDENTIALS_ID')]) {
+                    withCredentials([string(credentialsId: 'git-jenkins', variable: 'GIT_CREDENTIALS_ID')]) {
                         sh '''
                             git config user.email "user email 입력"
                             git config user.name "user name 입력"
