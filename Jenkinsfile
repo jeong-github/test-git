@@ -39,10 +39,12 @@ pipeline {
                             git add deploy.yaml
                             git commit -m "Update image tag to jeonghyuck/jenkins-test:${BUILD_NUMBER}" || echo "No changes to commit"
                             
-                            # 최신 브랜치 병합
-                            git pull origin master --no-rebase --no-edit
+                            # 병합 시 내 쪽(Jenkins)이 우선되도록 충돌 자동 해결
+                            git fetch origin master
+                            git merge -X ours origin/master -m "Merge with origin/master using ours strategy"
+
                             
-                            //git pull origin master --rebase
+                            
                             git push https://${GIT_USER}:${GIT_TOKEN}@github.com/jeong-github/test-git.git
                         '''
                     }
