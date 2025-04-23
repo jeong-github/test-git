@@ -36,7 +36,7 @@ spec:
       - env:
         - name: FOO
           value: BAR
-        image: jeonghyuck/jenkins-test:7
+        image: jeonghyuck/jenkins-test:8
         name: my-nginx
         ports:
         - containerPort: 80
