@@ -31,10 +31,10 @@ pipeline {
         stage('Commit and Push') {
             steps {
                 script {
-                    sshagent(credentials: ['jenkins-ssh-private']) {
+                    withCredentials([string(credentialsId: 'git-jenkins', variable: 'GIT_CREDENTIALS_ID')]) {
                         sh '''
-                            git config user.email "user email 입력"
-                            git config user.name "user name 입력"
+                            git config user.email "jch951753@gmail.com"
+                            git config user.name "jeong"
                             git add deploy.yaml
                             git commit -m "Update image tag to jeonghyuck/jenkins-test:${IMAGE_TAG}"
                             git push git@github.com:jeong-github/test-app.git
