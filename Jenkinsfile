@@ -31,15 +31,13 @@ pipeline {
         stage('Commit and Push') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'git-jenkins', variable: 'GIT_CREDENTIALS_ID')]) {
+                    withCredentials([usernamePassword(credentialsId: 'git-jenkins', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh '''
                             git config user.email "jch951753@gmail.com"
                             git config user.name "jeong"
                             git add deploy.yaml
                             git commit -m "Update image tag to jeonghyuck/jenkins-test:${IMAGE_TAG}"
-                            git push git@github.com:jeong-github/test-app.git
-                            //git push https://${GIT_CREDENTIALS_ID}@github.com/{user name 입력}/Manifest.git HEAD:main
-                            //git push https://github.com/jeong-github/test-app.git
+                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/jeong-github/test-app.git
                         '''
                     }
                 }
