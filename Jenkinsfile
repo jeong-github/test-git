@@ -38,7 +38,7 @@ pipeline {
                             git config user.name "jeong"
                             git add deploy.yaml
                             git commit -m "Update image tag to jeonghyuck/jenkins-test:${IMAGE_TAG}"
-                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/jeong-github/test-app.git
+                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/jeong-github/test-git.git
                         '''
                     }
                 }
