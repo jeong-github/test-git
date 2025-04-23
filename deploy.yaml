@@ -5,6 +5,7 @@ metadata:
     env: dev
     run: my-nginx
   name: my-nginx
+  namespace: my-nginx
 spec:
   ports:
   - port: 80
@@ -20,6 +21,7 @@ metadata:
   labels:
     env: dev
   name: my-nginx
+  namespace: my-nginx
 spec:
   replicas: 4
   selector:

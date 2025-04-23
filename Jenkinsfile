@@ -10,6 +10,7 @@ pipeline {
         stage('Clone repository') {
             steps {
                 checkout scm
+                sh 'git checkout master'
             }
         }
 
@@ -35,10 +36,16 @@ pipeline {
                         sh '''
                             git config user.email "jch951753@gmail.com"
                             git config user.name "jeong"
-                            git checkout master
                             git add deploy.yaml
-                            git commit -m "Update image tag to jeonghyuck/jenkins-test:${IMAGE_TAG}"
-                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/jeong-github/test-app.git
+                            git commit -m "Update image tag to jeonghyuck/jenkins-test:${BUILD_NUMBER}" || echo "No changes to commit"
+                            
+                            # 병합 시 내 쪽(Jenkins)이 우선되도록 충돌 자동 해결
+                            git fetch origin master
+                            git merge -X ours origin/master -m "Merge with origin/master using ours strategy"
+
+                            
+                            
+                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/jeong-github/test-git.git
                         '''
                     }
                 }
