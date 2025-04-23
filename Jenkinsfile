@@ -38,6 +38,12 @@ pipeline {
                             git config user.name "jeong"
                             git add deploy.yaml
                             git commit -m "Update image tag to jeonghyuck/jenkins-test:${IMAGE_TAG}"
+                            
+                            if [ -d ".git/rebase-merge" ]; then
+                            echo "중단된 rebase 작업 정리"
+                            git rebase --abort || rm -rf .git/rebase-merge
+                            fi
+                            
                             git pull origin master --rebase
                             git push https://${GIT_USER}:${GIT_TOKEN}@github.com/jeong-github/test-git.git
                         '''
