@@ -27,3 +27,20 @@ spec:
       - name: index-html-volume
         configMap:
           name: nginx-index-html  # Reference to your ConfigMap
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+  namespace: my-nginx
+spec:
+  ports:
+    - port: 80           
+      targetPort: 80      
+      nodePort: 30100      
+      protocol: TCP
+  selector:
+    env: dev
+    run: my-nginx
+  type: NodePort            
