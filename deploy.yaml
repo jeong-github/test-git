@@ -20,14 +20,32 @@ spec:
         image: jeonghyuck/jenkins-test:9
         ports:
         - containerPort: 80
+        - containerPort: 443  # Expose HTTPS port
         volumeMounts:
         - name: index-html-volume
-          mountPath: /usr/share/nginx/html  # Mount ConfigMap to the HTML directory, not to a file
+          mountPath: /usr/share/nginx/html  # Mount ConfigMap for index.html
+        - name: ssl-certs
+          mountPath: /etc/ssl/certs
+          readOnly: true  # SSL certs should be read-only
+        - name: ssl-private-keys
+          mountPath: /etc/ssl/private
+          readOnly: true  # SSL keys should be read-only
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/nginx.conf  # Mount the custom nginx.conf
+          subPath: nginx.conf  # Ensure it's mounted as a file
       volumes:
       - name: index-html-volume
         configMap:
-          name: nginx-index-html  # Reference to your ConfigMap
-
+          name: nginx-index-html  # Reference to your ConfigMap for index.html
+      - name: ssl-certs
+        secret:
+          secretName: nginx-tls-secret  # Reference to the SSL certificate secret
+      - name: ssl-private-keys
+        secret:
+          secretName: nginx-tls-secret  # Reference to the SSL key secret
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config  # Reference to the ConfigMap for nginx.conf
 ---
 apiVersion: v1
 kind: Service
@@ -36,11 +54,15 @@ metadata:
   namespace: my-nginx
 spec:
   ports:
-    - port: 80           
-      targetPort: 80      
-      nodePort: 30100      
+    - port: 80
+      targetPort: 80
+      nodePort: 30100  # Use a different nodePort, adjust if necessary
+      protocol: TCP
+    - port: 443
+      targetPort: 443
+      nodePort: 30101  # Port for HTTPS traffic
       protocol: TCP
   selector:
     env: dev
     run: my-nginx
-  type: NodePort            
+  type: NodePort
