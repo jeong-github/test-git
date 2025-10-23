@@ -20,32 +20,32 @@ spec:
         image: jeonghyuck/jenkins-test:9
         ports:
         - containerPort: 80
-        - containerPort: 443  # Expose HTTPS port
+        - containerPort: 443  # HTTPS 포트도 노출
         volumeMounts:
         - name: index-html-volume
-          mountPath: /usr/share/nginx/html  # Mount ConfigMap for index.html
+          mountPath: /usr/share/nginx/html  # ConfigMap을 사용하여 index.html 마운트
         - name: ssl-certs
           mountPath: /etc/ssl/certs
-          readOnly: true  # SSL certs should be read-only
+          readOnly: true  # SSL 인증서 파일은 읽기 전용으로 마운트
         - name: ssl-private-keys
           mountPath: /etc/ssl/private
-          readOnly: true  # SSL keys should be read-only
+          readOnly: true  # SSL 키 파일은 읽기 전용으로 마운트
         - name: nginx-config-volume
-          mountPath: /etc/nginx/nginx.conf  # Mount the custom nginx.conf
-          subPath: nginx.conf  # Ensure it's mounted as a file
+          mountPath: /etc/nginx/nginx.conf  # nginx.conf 파일을 마운트
+          subPath: nginx.conf  # nginx.conf 파일로 마운트
       volumes:
       - name: index-html-volume
         configMap:
-          name: nginx-index-html  # Reference to your ConfigMap for index.html
+          name: nginx-index-html  # index.html을 위한 ConfigMap
       - name: ssl-certs
         secret:
-          secretName: nginx-tls-secret  # Reference to the SSL certificate secret
+          secretName: nginx-secret  # SSL 인증서가 담긴 Secret (nginx-secret 사용)
       - name: ssl-private-keys
         secret:
-          secretName: nginx-tls-secret  # Reference to the SSL key secret
+          secretName: nginx-secret  # SSL 개인 키가 담긴 Secret (nginx-secret 사용)
       - name: nginx-config-volume
         configMap:
-          name: nginx-config  # Reference to the ConfigMap for nginx.conf
+          name: nginx-config  # nginx.conf 파일을 담은 ConfigMap
 ---
 apiVersion: v1
 kind: Service
@@ -56,11 +56,11 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30100  # Use a different nodePort, adjust if necessary
+      nodePort: 30100  # HTTP에 대한 NodePort (필요에 따라 조정)
       protocol: TCP
     - port: 443
       targetPort: 443
-      nodePort: 30101  # Port for HTTPS traffic
+      nodePort: 30101  # HTTPS에 대한 NodePort
       protocol: TCP
   selector:
     env: dev
