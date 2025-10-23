@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-index-html
+  namespace: my-nginx
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>기본 웹 페이지</title>
+    </head>
+    <body>
+        <h1>안녕하세요, HTML!</h1>
+        <p>첫번 째 문단</p>
+        <p>웹 페이지의 내용을 작성하는 곳입니다.</p>
+        <p>TESTTESTTEST</p>
+    </body>
+    </html>
