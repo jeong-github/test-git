@@ -42,6 +42,9 @@ spec:
         name: my-nginx
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: index-html-volume
+          mountPath: /usr/share/nginx/html/index.html
         resources:
           limits:
             cpu: 500m
@@ -49,3 +52,7 @@ spec:
           requests:
             cpu: 250m
             memory: 256Mi
+      volumes:
+      - name: index-html-volume
+        configMap:
+          name: nginx-index-html
