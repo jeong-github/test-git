@@ -14,8 +14,7 @@ data:
     </head>
     <body>
         <h1>안녕하세요, HTML!</h1>
-        <p>첫번 째 문단</p>
+        <p>이것은 첫 번째 문단입니다.</p>
         <p>웹 페이지의 내용을 작성하는 곳입니다.</p>
-        <p>TESTTESTTEST</p>
     </body>
     </html>
