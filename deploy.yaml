@@ -22,15 +22,8 @@ spec:
         - containerPort: 80
         volumeMounts:
         - name: index-html-volume
-          mountPath: /usr/share/nginx/html/index.html  # Ensure it's mounted as index.html
-        resources:
-          limits:
-            cpu: 500m
-            memory: 1Gi
-          requests:
-            cpu: 250m
-            memory: 256Mi
+          mountPath: /usr/share/nginx/html  # Mount ConfigMap to the HTML directory, not to a file
       volumes:
       - name: index-html-volume
         configMap:
-          name: nginx-index-html  # The ConfigMap you created
+          name: nginx-index-html  # Reference to your ConfigMap
